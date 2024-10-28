@@ -4,12 +4,15 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "start": "node server.js"
+    "dev": "nodemon src/index.js"
   },
   "author": "Asjal",
   "license": "ISC",
   "description": "",
   "dependencies": {
     "express": "^4.21.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7"
   }
 }
