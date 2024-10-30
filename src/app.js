@@ -21,9 +21,7 @@ import proReshape from './routes/proreshape.routes.js'
 
 
 //routes declaration
-app.use("/api/v1/modules/proreshape", proReshape)
-
-// http://localhost:8000/api/v1
+app.use("/api/v1/rewriter", proReshape)
 
 
 export { app }
