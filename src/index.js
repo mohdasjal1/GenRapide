@@ -18,19 +18,57 @@ async function getMatchPercentage(resumeText, requirementsText) {
     const response = await openai.chat.completions.create({
       model: "gpt-4",
       // prompt: `Compare this resume: "${resumeText}" with these requirements: "${requirementsText}" and give a match percentage.`,
-      messages: [{ role: "user", content: `Compare this resume: "${resumeText}" with these requirements: "${requirementsText}" and give a match percentage.` }],
+      messages: [{ role: "user", content: `Compare this resume: "${resumeText}" with these requirements: "${requirementsText}" and give a match percentage as a whole number between 0 and 100, no additional text.` }],
       // stream: true,
-      max_tokens: 50,
+      max_tokens: 4096,
     });
+
+    const matchPercentage = parseInt(response.choices[0].message.content);
+
+    // Implementing conditions based on match percentage
+    let resultMessage = '';
+    if (matchPercentage < 30) {
+        resultMessage = "Analyze the extracted text from the requirements document and resume. If the match is below 30%, respond with: 'This candidate is not suitable for this role based on the current resume.' Provide a brief summary explaining why the candidate does not meet the basic requirements.";
+
+    } else if (matchPercentage >= 30 && matchPercentage < 50) {
+        resultMessage = "Analyze the match between the provided resume and requirements document. If the match is between 30-50%, respond with: 'Please review this candidate in detail,' and include specific areas where the candidate partially meets the requirements, highlighting both strengths and gaps.";
+
+    } else if (matchPercentage >= 50) {
+        resultMessage = "Analyze the resume in relation to the requirements document. If the match exceeds 50%, respond with: 'The candidate meets most requirements but lacks certain experience.' Then identify any missing experience, specific skills, or years of experience required. Offer suggestions for improvement to align the resume more closely with the stated requirements.";
+    }
+
+    return { matchPercentage, resultMessage };
+
+
+
+
+
+
+
+
 
     // for await (const chunk of response) {
     //   // process.stdout.write(chunk.choices[0]?.delta?.content || "");
     //   console.log(chunk.choices[0]?.delta?.content || "");
     // return response.choices.content;
-    return response.choices[0].message.content;
+    // return response.choices[0].message.content;
 
   }
 
+  async function getResponse(resumeText, requirementsText, resultMessage) {
+    const response = await openai.chat.completions.create({
+      model: "gpt-4",
+      // prompt: `Compare this resume: "${resumeText}" with these requirements: "${requirementsText}" and give a match percentage.`,
+      messages: [{ role: "user", content: `Resume: "${resumeText}" Requirements: "${requirementsText}", Based on the given resume and requirements "${resultMessage}"` }],
+      // stream: true,
+      max_tokens: 4096,
+    });
+
+    const finalResult = (response.choices[0].message.content);
+
+    return { finalResult };
+
+  }
    
   
 
@@ -50,4 +88,4 @@ app.listen(process.env.PORT || 8000, () => {
 })
 
 
-export {getMatchPercentage}
+export {getMatchPercentage, getResponse}

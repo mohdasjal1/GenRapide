@@ -2,7 +2,8 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { readFileContent } from "../utils/filereader.js";
-import { getMatchPercentage } from "../index.js";
+import { getMatchPercentage, getResponse } from "../index.js";
+// import proReshapeModel from "../models/proreshape.models.js";
 
 const proReshape = asyncHandler(async (req, res) => {
   let { resume, requirements } = req.body;
@@ -28,12 +29,12 @@ const proReshape = asyncHandler(async (req, res) => {
 
 const rewriter = async (req, res) => {
   
-  const resumeFile = req.files.resume[0];
-  const requirementsFile = req.files.requirements[0];
+  const resumeFile = req.files.resumeFile[0];
+  const requirementsFile = req.files.requirementsFile[0];
 
   if (!(resumeFile && requirementsFile)) {
     return res.json({
-      success: true,
+      success: false,
       message: "File not uploaded successfully",
     });
   }
@@ -48,9 +49,15 @@ const rewriter = async (req, res) => {
       requirementsFile.mimetype
     );
 
-    const matchPercentage = await getMatchPercentage(resumeText, requirementsText);
+    // console.log(resumeText);
+    
 
-    res.json({ matchPercentage });
+    const { matchPercentage, resultMessage } = await getMatchPercentage(resumeText, requirementsText);
+
+    const finalResult = await getResponse(resumeText, requirementsText, resultMessage);
+
+    res.json({ matchPercentage, resultMessage, finalResult });
+    // res.json({matchPercentage, resultMessage})
 
     // Now you can use resumeText and requirementsText with OpenAI API
   } catch (error) {
@@ -62,24 +69,7 @@ const rewriter = async (req, res) => {
 //   return res.json({ success: true, message: "File uploaded successfully" });
 };
 
-
-
-// let hits = "Asjal"
-
-// const hit = asyncHandler(async (req, res) => {
-//     return res.
-//     status(200).
-//     json(
-//         new ApiResponse(
-//             200,
-//             {hits: hits}
-//         ),
-//         "Response updated"
-//     )
-// })
-
 export {
   proReshape,
-  rewriter,
-  // hit
+  rewriter
 };

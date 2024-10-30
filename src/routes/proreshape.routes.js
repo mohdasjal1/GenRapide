@@ -4,13 +4,13 @@ import { proReshape, rewriter } from "../controllers/proreshape.controller.js"
 
 const router = Router();
 
-router.route("/submit").post(proReshape)
+router.route("/submit").post(upload.any(),proReshape)
 
 router.route('/match')
 .post(upload.fields(
     [
-        { name: 'resume' },
-        { name: 'requirements' }
+        { name: 'resumeFile' },
+        { name: 'requirementsFile' }
     ]
 ), rewriter)
 
