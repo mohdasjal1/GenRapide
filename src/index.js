@@ -4,6 +4,7 @@ import { app } from "./app.js";
 import OpenAI from "openai";
 import Configuration from "openai"
 
+
 dotenv.config({
     path: './.env'
 })
