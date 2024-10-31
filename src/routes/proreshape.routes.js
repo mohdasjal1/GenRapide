@@ -1,21 +1,31 @@
 import { Router } from "express";
 import upload from "../middlewares/multer.js";
-import { proReshape, rewriter } from "../controllers/proreshape.controller.js"
+import { handlePdf, handleText } from "../controllers/proreshape.controller.js"
 
 const router = Router();
 
-router.route("/submit").post(upload.any(),proReshape)
+// router.route("/submit").post(upload.any(),proReshape)
+// router.route('/match')
+// .post(upload.fields(
+//     [
+//         { name: 'resumeFile' },
+//         { name: 'requirementsFile' }
+//     ]
+// ), rewriter)
 
-router.route('/match')
-.post(upload.fields(
-    [
-        { name: 'resumeFile' },
-        { name: 'requirementsFile' }
-    ]
-), rewriter)
+router.route("/upload").post(upload.fields([
+    { name: 'resumeFile' },
+    { name: 'requirementsFile' }
+]), (req, res, next) => {
+    if (req.files.resumeFile && req.files.requirementsFile) {
+        // Call the rewriter function if both files are present
+        return handlePdf(req, res, next);
+    } else {
+        // Call proReshape if only general files are uploaded
+        return handleText(req, res, next);
+    }
+});
 
 
-
-// router.route("/hit").get(hit)
 
 export default router

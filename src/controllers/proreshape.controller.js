@@ -5,7 +5,7 @@ import { readFileContent } from "../utils/filereader.js";
 import { getMatchPercentage, getResponse } from "../index.js";
 // import proReshapeModel from "../models/proreshape.models.js";
 
-const proReshape = asyncHandler(async (req, res) => {
+const handleText = asyncHandler(async (req, res) => {
   let { resume, requirements } = req.body;
 
   if (!(resume && requirements)) {
@@ -27,7 +27,7 @@ const proReshape = asyncHandler(async (req, res) => {
   );
 });
 
-const rewriter = async (req, res) => {
+const handlePdf = async (req, res) => {
   
   const resumeFile = req.files.resumeFile[0];
   const requirementsFile = req.files.requirementsFile[0];
@@ -70,6 +70,6 @@ const rewriter = async (req, res) => {
 };
 
 export {
-  proReshape,
-  rewriter
+  handlePdf,
+  handleText
 };
