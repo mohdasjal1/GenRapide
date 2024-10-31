@@ -22,15 +22,15 @@ import pdfParse from 'pdf-parse';
 import mammoth from 'mammoth';
 
 export async function readFileContent(filePath, mimeType) {
-  const path = './test/data/05-versions-space.pdf';
+//   const path = './test/data/05-versions-space.pdf';
 
-if (fs.existsSync(path)) {
-  const data = fs.readFileSync(path);
-  // Process the file as needed
-} else {
-  console.warn(`File not found: ${path}`);
-  // Handle the missing file scenario
-}
+// if (fs.existsSync(path)) {
+//   const data = fs.readFileSync(path);
+//   // Process the file as needed
+// } else {
+//   console.warn(`File not found: ${path}`);
+//   // Handle the missing file scenario
+// }
   
 
   // Check if the file exists before reading
