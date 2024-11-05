@@ -17,11 +17,26 @@ const openai = new OpenAI(configuration);
 
 async function getMatchPercentage(resumeText, requirementsText) {
     const response = await openai.chat.completions.create({
-      model: "gpt-4",
+      model: "gpt-4o-mini",
       // prompt: `Compare this resume: "${resumeText}" with these requirements: "${requirementsText}" and give a match percentage.`,
-      messages: [{ role: "user", content: `Compare this resume: "${resumeText}" with these requirements: "${requirementsText}" and give a match percentage as a whole number between 0 and 100, no additional text.` }],
+      messages: [
+        {
+          "role": "system",
+          "content": [
+            {
+              "type": "text",
+              "text": `
+                You are an expert in analyzing government Bids/RFPs.
+              `
+            }
+          ]
+        },
+
+        {
+          "role": "user", "content": `Compare this resume: "${resumeText}" with these requirements: "${requirementsText}" and give a match percentage as a whole number between 0 and 100, no additional text.`
+        }
+      ],
       // stream: true,
-      max_tokens: 4096,
     });
 
     const matchPercentage = parseInt(response.choices[0].message.content);
@@ -40,49 +55,42 @@ async function getMatchPercentage(resumeText, requirementsText) {
 
     return { matchPercentage, resultMessage };
 
-
-
-
-
-
-
-
-
-    // for await (const chunk of response) {
-    //   // process.stdout.write(chunk.choices[0]?.delta?.content || "");
-    //   console.log(chunk.choices[0]?.delta?.content || "");
-    // return response.choices.content;
-    // return response.choices[0].message.content;
-
   }
 
-  async function getResponse(resumeText, requirementsText, resultMessage) {
+  async function getResponse(resumeText, requirementsText, matchPercentage, resultMessage) {
     const response = await openai.chat.completions.create({
-      model: "gpt-4",
+      model: "gpt-4o-mini",
       // prompt: `Compare this resume: "${resumeText}" with these requirements: "${requirementsText}" and give a match percentage.`,
-      messages: [{ role: "user", content: `Resume: "${resumeText}" Requirements: "${requirementsText}", Based on the given resume and requirements "${resultMessage}"` }],
+      messages: [
+        {
+          "role": "system",
+          "content": [
+            {
+              "type": "text",
+              "text": `
+                You are an expert in analyzing government Bids/RFPs.
+              `
+            }
+          ]
+        },
+        {
+           "role": "user", "content": `RESUME: "${resumeText}"  REQUIREMENTS: "${requirementsText}",  BASED ON MATCH PERCENTAGE OF ${matchPercentage}, "${resultMessage}"` 
+        }
+      ],
       // stream: true,
       max_tokens: 4096,
     });
 
     const finalResult = (response.choices[0].message.content);
 
-    return { finalResult };
+    return finalResult;
 
   }
    
-  
-
-
-
 
 app.get('/', (req, res) => {
     res.send("Api Working.")
 })
-
-
-
-
 
 app.listen(process.env.PORT || 4000, () => {
     console.log(`⚙️ Server is running at port : ${process.env.PORT}`);

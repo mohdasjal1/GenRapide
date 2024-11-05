@@ -6,25 +6,35 @@ import { getMatchPercentage, getResponse } from "../index.js";
 // import proReshapeModel from "../models/proreshape.models.js";
 
 const handleText = asyncHandler(async (req, res) => {
-  let { resume, requirements } = req.body;
+  const { resumeText, requirementsText } = req.body;
 
-  if (!(resume && requirements)) {
+  if (!(resumeText && requirementsText)) {
     throw new ApiError(401, "Invalid Data");
   }
 
-  resume = "Resume from Backend : " + resume;
-  requirements = "Requirements from Backend : " + requirements;
+  try {
+    
+    const { matchPercentage, resultMessage } = await getMatchPercentage(resumeText, requirementsText);
+    const finalResult = await getResponse(resumeText, requirementsText, matchPercentage, resultMessage);
 
-  return res.status(200).json(
-    new ApiResponse(
-      200,
-      {
-        resume: resume,
-        requirements: requirements,
-      },
-      "Response Updated Successfully !"
-    )
-  );
+    return res.status(200).json(
+      new ApiResponse(
+        200,
+        {
+          matchPercentage,
+          finalResult
+        },
+        "Response Updated Successfully !"
+      )
+    );
+
+  } catch (error) {
+    console.log(error);
+    
+    res.status(500).json({ error: "Error reading text" });
+  }
+
+
 });
 
 const handlePdf = async (req, res) => {
@@ -54,7 +64,7 @@ const handlePdf = async (req, res) => {
 
     const { matchPercentage, resultMessage } = await getMatchPercentage(resumeText, requirementsText);
 
-    const finalResult = await getResponse(resumeText, requirementsText, resultMessage);
+    const finalResult = await getResponse(resumeText, requirementsText,matchPercentage, resultMessage);
 
     res.json({ matchPercentage, resultMessage, finalResult });
     // res.json({matchPercentage, resultMessage})
