@@ -60,7 +60,7 @@ const handleDownload = async (req, res) => {
 
    // Check if file exists; if not, regenerate it
    if (!fs.existsSync(filePath)) {
-    const responseText = "Your final message here"; // Replace with actual data you want in the file
+    const responseText = `"${filePath}"`; // Replace with actual data you want in the file
     await generateDocxWithResponse(responseText, 'Candidate_Analysis_Report.docx');
   }
 
@@ -70,7 +70,7 @@ const handleDownload = async (req, res) => {
       console.error("Error downloading file:", err);
       res.status(500).send("Could not download file");
     } else {
-      fs.unlinkSync(filePath); // Clean up temp file after download
+      // fs.unlinkSync(filePath); // Clean up temp file after download
     }
   });
 };
