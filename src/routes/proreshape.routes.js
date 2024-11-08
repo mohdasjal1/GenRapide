@@ -1,6 +1,6 @@
 import { Router } from "express";
 import upload from "../middlewares/multer.js";
-import { handlePdf, handleText } from "../controllers/proreshape.controller.js"
+import { handlePdf, handleText, downloadFinalMessage, handleDownload } from "../controllers/proreshape.controller.js"
 
 const router = Router();
 
@@ -26,6 +26,12 @@ router.route("/upload").post(upload.fields([
     }
 });
 
+
+// router.get("/download", downloadFinalMessage);
+router.get("/download", handleDownload);
+
+// router.route("/download-document").get(generateAndDownloadDocument)
+// router.get("/download-document", generateAndDownloadDocument);
 
 
 export default router

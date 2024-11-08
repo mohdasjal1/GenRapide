@@ -50,7 +50,7 @@ async function getMatchPercentage(resumeText, requirementsText) {
         resultMessage = "Analyze the match between the provided resume and requirements document. If the match is between 30-50%, respond with: 'Please review this candidate in detail,' and include specific areas where the candidate partially meets the requirements, highlighting both strengths and gaps.";
 
     } else if (matchPercentage >= 50) {
-        resultMessage = "Analyze the resume in relation to the requirements document. If the match exceeds 50%, respond with: 'The candidate meets most requirements but lacks certain experience.' Then identify any missing experience, specific skills, or years of experience required. Offer suggestions for improvement to align the resume more closely with the stated requirements.";
+        resultMessage = "Analyze the resume in relation to the requirements document. If the match exceeds 50%, respond with: 'The candidate meets most requirements but lacks certain experience.' Then identify any missing experience, specific skills, or years of experience required. Offer suggestions for improvement to align the resume more closely with the stated requirements. Also add a match percentage heading in Response";
     }
 
     return { matchPercentage, resultMessage };
