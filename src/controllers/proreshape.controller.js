@@ -71,7 +71,7 @@ const handleDownload = async (req, res) => {
 export const downloadFinalMessage = asyncHandler((req, res) => {
   const tempFilePath = path.join("public/temp", "final_message.docx");
 
-  // Check if file exists before sending
+  // Check if file exist before sending
   if (fs.existsSync(tempFilePath)) {
       res.download(tempFilePath, "Candidate_Analysis_Report.docx", (err) => {
           if (err) {

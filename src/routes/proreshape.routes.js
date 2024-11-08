@@ -26,12 +26,6 @@ router.route("/upload").post(upload.fields([
     }
 });
 
-
-// router.get("/download", downloadFinalMessage);
 router.get("/download", handleDownload);
-
-// router.route("/download-document").get(generateAndDownloadDocument)
-// router.get("/download-document", generateAndDownloadDocument);
-
 
 export default router
