@@ -57,6 +57,14 @@ const docxFilePath = await generateDocxWithResponse(finalResult);
 
 const handleDownload = async (req, res) => {
   const filePath = path.join(process.cwd(), 'public/temp', 'Candidate_Analysis_Report.docx');
+
+   // Check if file exists; if not, regenerate it
+   if (!fs.existsSync(filePath)) {
+    const responseText = "Your final message here"; // Replace with actual data you want in the file
+    await generateDocxWithResponse(responseText, 'Candidate_Analysis_Report.docx');
+  }
+
+
   res.download(filePath, "Candidate_Analysis_Report.docx", (err) => {
     if (err) {
       console.error("Error downloading file:", err);
