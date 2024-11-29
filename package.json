@@ -10,16 +10,20 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@azure/storage-blob": "^12.26.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "docx": "^9.0.2",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "mammoth": "^1.8.0",
-    "mongoose": "^8.7.3",    
+    "mongoose": "^8.7.3",
     "multer": "^1.4.5-lts.1",
+    "mysql2": "^3.11.4",
     "openai": "^4.68.4",
-    "pdf-parse": "^1.1.1"
+    "pdf-lib": "^1.17.1",
+    "pdf-parse": "^1.1.1",
+    "pg": "^8.13.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.7",

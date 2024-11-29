@@ -1,6 +1,5 @@
 import dotenv from "dotenv"
 import { app } from "./app.js";
-// import { Configuration, OpenAIApi } from 'openai';
 import OpenAI from "openai";
 import Configuration from "openai"
 
@@ -95,6 +94,5 @@ app.get('/', (req, res) => {
 app.listen(process.env.PORT || 4000, () => {
     console.log(`⚙️ Server is running at port : ${process.env.PORT}`);
 })
-
 
 export {getMatchPercentage, getResponse}

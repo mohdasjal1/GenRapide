@@ -4,15 +4,6 @@ import { handlePdf, handleText, downloadFinalMessage, handleDownload } from "../
 
 const router = Router();
 
-// router.route("/submit").post(upload.any(),proReshape)
-// router.route('/match')
-// .post(upload.fields(
-//     [
-//         { name: 'resumeFile' },
-//         { name: 'requirementsFile' }
-//     ]
-// ), rewriter)
-
 router.route("/upload").post(upload.fields([
     { name: 'resumeFile' },
     { name: 'requirementsFile' }

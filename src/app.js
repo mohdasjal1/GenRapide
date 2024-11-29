@@ -17,10 +17,18 @@ app.use(cookieParser())
 
 //routes
 import proReshape from './routes/proreshape.routes.js'
+import  getUserFiles  from "./routes/rfplist.routes.js"
+// import listBlobs  from "./routes/rfplist.routes.js"
+import downloadBlob  from "./routes/rfplist.routes.js"
+import downloadDataAsDcox  from "./routes/rfplist.routes.js"
 
 
 //routes declaration
 app.use("/api/v1/rewriter", proReshape)
+app.use("/api/v1/rewriter", getUserFiles)
+// app.use("/api/v1/rewriter", listBlobs)
+app.use("/api/v1/rewriter", downloadBlob)
+app.use("/api/v1/rewriter", downloadDataAsDcox)
 
 
 export { app }
