@@ -33,7 +33,7 @@ const getUserFiles = asyncHandler(async (req, res) => {
   // Connect to the database and fetch files for the given user ID
   const connection = await mysql.createConnection(connectionConfig);
   const [files] = await connection.execute(
-    "SELECT user_id, file_name, data, created_at, file_size FROM extraction WHERE user_id = ?",
+    "SELECT user_id, file_name, data, created_at, file_size, pages FROM extraction WHERE user_id = ?",
     [userId]
   );
 
