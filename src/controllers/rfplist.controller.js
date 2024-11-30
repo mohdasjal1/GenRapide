@@ -24,8 +24,7 @@ const connectionConfig = {
 
 //  List all the PDFs uploaded through RFP Decoder
 const getUserFiles = asyncHandler(async (req, res) => {
-    
-  const { userId } = req.params; // Get user ID from request parameters
+  const { userId } = req.params; 
 
   if (!userId) {
     throw new ApiError("User ID is required", 400);
@@ -34,14 +33,35 @@ const getUserFiles = asyncHandler(async (req, res) => {
   // Connect to the database and fetch files for the given user ID
   const connection = await mysql.createConnection(connectionConfig);
   const [files] = await connection.execute(
-    "SELECT user_id, file_name, data FROM extraction WHERE user_id = ?",
+    "SELECT user_id, file_name, data, created_at, file_size FROM extraction WHERE user_id = ?",
     [userId]
   );
 
   await connection.end();
 
-  // Return file names to the frontend
-  res.status(200).json({ success: true, data: files });
+  const formatFileSize = (bytes) => {
+    if (bytes < 1024) {
+      return `${bytes} B`;
+    } else if (bytes < 1024 * 1024) {
+      return `${(bytes / 1024).toFixed(2)} KB`;
+    } else {
+      return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
+    }
+  };
+
+  const formatDate = (isoDate) => {
+    const date = new Date(isoDate);
+    const options = { day: "2-digit", month: "short", year: "numeric" };
+    return date.toLocaleDateString("en-US", options).replace(",", ""); // Ensure formatting without commas
+  };
+
+  const formattedFiles = files.map((file) => ({
+    ...file,
+    file_size: formatFileSize(file.file_size), // Replace raw file size with formatted size
+    created_at: formatDate(file.created_at), // Replace raw date with formatted date
+  }));
+
+  res.status(200).json({ success: true, data: formattedFiles });
 });
 
 
